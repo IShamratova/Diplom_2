@@ -1,0 +1,2 @@
+{'success': True, 'message': 'User successfully removed'}
+{'success': True, 'orders': [{'_id': '67d311179ed280001b598d3d', 'ingredients': ['61c0c5a71d1f82001bdaaa6d', '61c0c5a71d1f82001bdaaa6f'], 'status': 'done', 'name': 'Бессмертный флюоресцентный бургер', 'createdAt': '2025-03-13T17:08:39.198Z', 'updatedAt': '2025-03-13T17:08:40.556Z', 'number': 195502}], 'total': 195502, 'totalToday': 1451}

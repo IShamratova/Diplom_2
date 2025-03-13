@@ -1,0 +1,2 @@
+{'success': True, 'message': 'User successfully removed'}
+{'success': True, 'orders': [], 'total': 195501, 'totalToday': 1450}

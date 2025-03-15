@@ -15,7 +15,7 @@ class TestUpdateUserData:
         {"name": "New Name", "expected_key": "name"}
     ])
     def test_update_user_authorized(self, authorized_user, update_payload):
-        response = requests.get(TestData.GET_USER_API_URL, headers={"Authorization": authorized_user["accessToken"]})
+        response = requests.get(TestData.USER_API_URL, headers={"Authorization": authorized_user["accessToken"]})
 
         assert response.status_code == 200, f"Ошибка: {response.text}"
         data = response.json()
@@ -23,14 +23,14 @@ class TestUpdateUserData:
         assert "user" in data, "Отсутствует информация о пользователе"
 
         headers = {"Authorization": authorized_user["accessToken"]}
-        response = requests.patch(TestData.UPDATE_USER_API_URL, json=update_payload, headers=headers)
+        response = requests.patch(TestData.USER_API_URL, json=update_payload, headers=headers)
 
         assert response.status_code == 200, f"Ожидался 200, но получен {response.status_code}: {response.text}"
         data = response.json()
         assert data["success"] is True, "Запрос неуспешен"
         assert "user" in data, "Отсутствует информация о пользователе"
 
-        response = requests.get(TestData.GET_USER_API_URL, headers={"Authorization": authorized_user["accessToken"]})
+        response = requests.get(TestData.USER_API_URL, headers={"Authorization": authorized_user["accessToken"]})
 
         assert response.status_code == 200, f"Ошибка: {response.text}"
         data = response.json()
@@ -45,7 +45,7 @@ class TestUpdateUserData:
     @allure.title("Попытка изменить данные без авторизации с ожиданием ошибки")
     def test_update_user_unauthorized(self, update_payload):
 
-        response = requests.patch(TestData.UPDATE_USER_API_URL, json=update_payload)
+        response = requests.patch(TestData.USER_API_URL, json=update_payload)
 
         assert response.status_code == 401, f"Ожидался 401, но получен {response.status_code}: {response.text}"
         data = response.json()
@@ -59,7 +59,7 @@ class TestUpdateUserData:
     def test_update_user_existing_email(self, authorized_user, update_payload):
 
         headers = {"Authorization": authorized_user["accessToken"]}
-        response = requests.patch(TestData.UPDATE_USER_API_URL, json=update_payload, headers=headers)
+        response = requests.patch(TestData.USER_API_URL, json=update_payload, headers=headers)
 
         assert response.status_code == 403, f"Ожидался 403, но получен {response.status_code}: {response.text}"
         data = response.json()

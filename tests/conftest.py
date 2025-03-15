@@ -19,7 +19,7 @@ def created_user():
         "name": name
     }
 
-    response = requests.post(TestData.CREATE_USER_API_URL, json=payload)
+    response = requests.post(TestData.REGISTER_USER_API_URL, json=payload)
     assert response.status_code == 200, f"Ошибка при создании пользователя: {response.text}"
 
     data = response.json()
@@ -58,7 +58,7 @@ def logged_in_user(created_user):
 @pytest.fixture
 def get_ingredients():
     # Получает список доступных ингредиентов
-    response = requests.get(TestData.GET_INGREDIENTS_API_URL)
+    response = requests.get(TestData.INGREDIENTS_API_URL)
     assert response.status_code == 200, f"Ошибка при получении ингредиентов: {response.text}"
 
     data = response.json()
@@ -75,14 +75,11 @@ def authorized_user(logged_in_user):
 
     # Удаляем пользователя после теста
     headers = {"Authorization": logged_in_user["accessToken"]}
-    response = requests.delete(TestData.DELETE_USER_API_URL, headers=headers)
+    response = requests.delete(TestData.USER_API_URL, headers=headers)
     data = response.json()
-    print(data)
     assert data["message"] == "User successfully removed", "Пользователь не удалён"
 
     headers = {"Authorization": logged_in_user["accessToken"]}
-    response = requests.get(TestData.GET_ORDERS_API_URL, headers=headers)
+    response = requests.get(TestData.ORDERS_API_URL, headers=headers)
 
     assert response.status_code == 200, f"Ошибка: {response.text}"
-    data = response.json()
-    print(data)

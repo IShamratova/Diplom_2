@@ -23,7 +23,7 @@ class TestCreateUser:
     @allure.title('Нельзя создать двух одинаковых пользователей')
     def test_create_existing_user(self, created_user, payload, expected_status_code, expected_success, expected_message):
 
-        response = requests.post(TestData.CREATE_USER_API_URL, json={
+        response = requests.post(TestData.REGISTER_USER_API_URL, json={
             "email": created_user["email"],  # Используем email уже созданного пользователя
             "password": created_user["password"],
             "name": created_user["name"]
@@ -42,7 +42,7 @@ class TestCreateUser:
     @allure.title('Нельзя создать пользователя с незаполненным обязательным полем')
     def test_create_user_failed(self, payload):
 
-        response = requests.post(TestData.CREATE_USER_API_URL, json=payload)
+        response = requests.post(TestData.REGISTER_USER_API_URL, json=payload)
 
         assert response.status_code == 403, f"Ошибка: {response.text}"
         data = response.json()

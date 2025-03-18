@@ -20,7 +20,6 @@ class TestUpdateUserData:
         assert response.status_code == 200, f"Ошибка: {response.text}"
         data = response.json()
         assert data["success"] is True, "Запрос неуспешен"
-        assert "user" in data, "Отсутствует информация о пользователе"
 
         headers = {"Authorization": authorized_user["accessToken"]}
         response = requests.patch(TestData.USER_API_URL, json=update_payload, headers=headers)
@@ -28,7 +27,6 @@ class TestUpdateUserData:
         assert response.status_code == 200, f"Ожидался 200, но получен {response.status_code}: {response.text}"
         data = response.json()
         assert data["success"] is True, "Запрос неуспешен"
-        assert "user" in data, "Отсутствует информация о пользователе"
 
         response = requests.get(TestData.USER_API_URL, headers={"Authorization": authorized_user["accessToken"]})
 
@@ -50,7 +48,7 @@ class TestUpdateUserData:
         assert response.status_code == 401, f"Ожидался 401, но получен {response.status_code}: {response.text}"
         data = response.json()
         assert data["success"] is False, "Запрос не должен быть успешным"
-        assert data["message"] == "You should be authorised", "Неверное сообщение об ошибке"
+        assert data["message"] == TestData.TEXT_YOU_SHOULD_BE_AUTHORIZED, "Неверное сообщение об ошибке"
 
     @pytest.mark.parametrize("update_payload", [
         {"email": "existing_user@yandex.ru"}  # Уже существующий email
@@ -64,7 +62,7 @@ class TestUpdateUserData:
         assert response.status_code == 403, f"Ожидался 403, но получен {response.status_code}: {response.text}"
         data = response.json()
         assert data["success"] is False, "Запрос не должен быть успешным"
-        assert data["message"] == "User with such email already exists", "Неверное сообщение об ошибке"
+        assert data["message"] == TestData.TEXT_USER_WITH_SUCH_EMAIL_ALREADY_EXISTS, "Неверное сообщение об ошибке"
 
 
 

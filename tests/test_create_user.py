@@ -12,9 +12,15 @@ class TestCreateUser:
 
         assert created_user is not None, "Созданный пользователь отсутствует"
 
+        response = created_user["response"]
+        assert response.status_code == 200, f"Ошибка при создании пользователя: {response.text}"
+
+        data = response.json()
+        assert data.get("success"), "Неуспешное создание пользователя"
+
     @pytest.mark.parametrize("payload, expected_status_code, expected_success, expected_message", [
         (
-            {"email": "existing_user@yandex.ru", "password": "password2", "name": "User Two"},
+            {"email": TestData.EXISTING_EMAIL, "password": TestData.PASSWORD, "name": TestData.NAME},
             403,
             False,
             "User already exists"
@@ -35,9 +41,9 @@ class TestCreateUser:
         assert data["message"] == expected_message, f"Ожидалось сообщение '{expected_message}', но получено '{data['message']}'"
 
     @pytest.mark.parametrize("payload", [
-        {"email": "missing_field@yandex.ru", "password": "password3"},  # Нет имени
-        {"password": "password4", "name": "User Four"},  # Нет email
-        {"email": "no_password@yandex.ru", "name": "User Five"}  # Нет пароля
+        {"email": TestData.EMAIL, "password": TestData.PASSWORD},  # Нет имени
+        {"password": TestData.PASSWORD, "name": TestData.NAME},  # Нет email
+        {"email": TestData.EMAIL, "name": TestData.NAME}  # Нет пароля
     ])
     @allure.title('Нельзя создать пользователя с незаполненным обязательным полем')
     def test_create_user_failed(self, payload):
@@ -47,7 +53,7 @@ class TestCreateUser:
         assert response.status_code == 403, f"Ошибка: {response.text}"
         data = response.json()
         assert data["success"] is False, "Запрос не должен быть успешным"
-        assert data["message"] == "Email, password and name are required fields", "Неверное сообщение об ошибке"
+        assert data["message"] == TestData.TEXT_EMAIL_PASSWORD_AND_NAME_ARE_REQUIRED_FIELDS, "Неверное сообщение об ошибке"
 
 
 

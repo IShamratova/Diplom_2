@@ -32,7 +32,7 @@ class TestCrateOrder:
 
         assert response.status_code == 400, f"Ожидался 400, но получен {response.status_code}: {response.text}"
         assert response.json()["success"] is False, "Система вернула успешный результат, хотя ожидалась ошибка"
-        assert response.json()["message"] == "Ingredient ids must be provided", "Неверное сообщение об ошибке"
+        assert response.json()["message"] == TestData.TEXT_INGREDIENT_IDS_MUST_BE_PROVIDED, "Неверное сообщение об ошибке"
 
     @allure.title("Создание заказа с неверным хешем ингредиентов")
     def test_create_order_invalid_ingredient(self, authorized_user):

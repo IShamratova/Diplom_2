@@ -31,4 +31,4 @@ class TestGetUserOrders:
         assert response.status_code == 401, f"Ошибка: {response.text}"
         data = response.json()
         assert data["success"] is False, "Запрос должен быть неуспешным"
-        assert data["message"] == "You should be authorised", "Неверное сообщение об ошибке"
+        assert data["message"] == TestData.TEXT_YOU_SHOULD_BE_AUTHORIZED, "Неверное сообщение об ошибке"

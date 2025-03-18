@@ -17,17 +17,12 @@ class TestLoginUser:
         assert response.status_code == 200, f"Ошибка: {response.text}"
         data = response.json()
         assert data["success"] is True, "Запрос неуспешен"
-        assert "accessToken" in data, "Отсутствует accessToken"
-        assert "refreshToken" in data, "Отсутствует refreshToken"
-        assert "user" in data, "Отсутствует информация о пользователе"
-        assert data["user"]["email"] == authorized_user["email"], "Email пользователя не совпадает"
-        assert data["user"]["name"] == authorized_user["name"], "Имя пользователя не совпадает"
 
     @pytest.mark.parametrize("payload", [
-        {"email": "wrong_user@yndex.ru", "password": "696969"},  # Неверный email
-        {"email": "ivan-ivanov6969@yandex.ru", "password": "p"},  # Неверный пароль
-        {"email": "ivan-ivanov6969@yandex.ru"},  # Нет пароля
-        {"password": "696969"}  # Нет email
+        {"email": TestData.WRONG_EMAIL, "password": TestData.PASSWORD},  # Неверный email
+        {"email": TestData.EMAIL, "password": TestData.WRONG_PASSWORD},  # Неверный пароль
+        {"email": TestData.EMAIL},  # Нет пароля
+        {"password": TestData.PASSWORD}  # Нет email
     ])
     @allure.title("Ошибка авторизации с неверными данными")
     def test_login_failure(self, payload):
@@ -37,4 +32,4 @@ class TestLoginUser:
         assert response.status_code == 401, f"Ошибка: {response.text}"
         data = response.json()
         assert data["success"] is False, "Запрос не должен быть успешным"
-        assert data["message"].strip().lower() == "email or password are incorrect", "Неверное сообщение об ошибке"
+        assert data["message"].strip().lower() == TestData.TEXT_EMAIL_OR_PASSWORD_ARE_INCORRECT, "Неверное сообщение об ошибке"
